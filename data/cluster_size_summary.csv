@@ -1,0 +1,10 @@
+dataset,cluster,label,n
+pooled,1,C1 enriching,491
+pooled,2,C2 intermediate,264
+pooled,3,C3 depleted,1390
+ssDNA,1,C1 enriching,160
+ssDNA,2,C2 intermediate,75
+ssDNA,3,C3 depleted,817
+dsDNA,1,C1 enriching,262
+dsDNA,2,C2 intermediate,191
+dsDNA,3,C3 depleted,640
