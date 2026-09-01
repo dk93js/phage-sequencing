@@ -56,11 +56,11 @@ w = 0.38
 ax.bar(stab.k - w/2, stab.mean_jaccard, w, color=C2, label="mean over clusters")
 ax.bar(stab.k + w/2, stab.min_cluster,  w, color=C3, label="least stable cluster")
 ax.axhline(0.75, color=C1, ls="--", lw=1.5)
-ax.text(1.6, 0.765, "stable", color=C1, fontsize=11, ha="left")
+ax.text(6.35, 0.765, "stable", color=C1, fontsize=11, ha="right")
 ax.set_xlabel("number of clusters (k)"); ax.set_ylabel("bootstrap Jaccard")
 ax.set_ylim(0, 1.28); ax.set_yticks([0, 0.25, 0.5, 0.75, 1.0]); ax.set_xticks(stab.k)
 ax.legend(frameon=False, loc="upper right", ncol=1)
-ax.set_title("Cluster stability (200 bootstrap resamples)")
+ax.set_title("Cluster stability\n(200 bootstrap resamples)")
 save(fig, "suppfig1D_bootstrap_jaccard")
 
 fig, ax = plt.subplots(figsize=(H * 1.05, H))
@@ -69,10 +69,10 @@ for rnd, col, mk in [("R2", C3, "^"), ("R3", C1, "o"), ("R4", C2, "s")]:
     ax.plot(s.k, s.slope, mk + "-", color=col, label=rnd)
 ax.axhline(1.0, color=GREY, ls=":", lw=1.5)
 for k, g in conc[conc["round"] == "R3"].groupby("k"):
-    ax.text(k, 0.35, f"n={int(g.n.iloc[0])}", ha="center", fontsize=10, color="#555555")
+    ax.text(k, 1.10, f"n={int(g.n.iloc[0])}", ha="center", fontsize=10, color="#555555")
 ax.set_xlabel("number of clusters (k)"); ax.set_ylabel("log–log slope (dsDNA on ssDNA)")
-ax.set_ylim(0.3, 1.15); ax.set_xticks(sorted(conc.k.unique()))
-ax.legend(frameon=False, title=None, loc="center left", bbox_to_anchor=(0.02, 0.52))
+ax.set_ylim(0.3, 1.18); ax.set_xlim(1.6, 6.4); ax.set_xticks(sorted(conc.k.unique()))
+ax.legend(frameon=False, title=None, loc="center left", bbox_to_anchor=(0.02, 0.45))
 ax.set_title("Enriching-cluster slope across k")
 save(fig, "suppfig1E_slope_vs_k")
 

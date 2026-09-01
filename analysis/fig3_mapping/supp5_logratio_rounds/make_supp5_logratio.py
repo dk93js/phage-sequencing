@@ -113,7 +113,6 @@ ax.axhline(0, color="k", ls=":", lw=1)
 ax.set_xticks(x); ax.set_xticklabels([f"R{i}" for i in range(5)])
 ax.set_xlabel("panning round")
 ax.set_ylabel("log$_{10}$(ssDNA / dsDNA)")
-ax.set_title("Antigen-reactive clonotypes separate at R3–R4")
 ax.set_ylim(-0.85, 1.35)
 for R in range(5):
     p = S[R][2]
