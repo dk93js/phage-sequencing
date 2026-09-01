@@ -4,6 +4,8 @@ antigen-reactivity result is unchanged under every reasonable calling rule.
 Reproduces the paper's numbers (mean call >= 0.5 -> 90 reactive / 478 non-reactive;
 146 matched -> 35 +/111 -) and re-runs Figure 3B under alternative rules.
 """
+import os
+os.makedirs("out/figures", exist_ok=True)
 import numpy as np, pandas as pd
 from scipy import stats
 

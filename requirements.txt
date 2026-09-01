@@ -4,8 +4,9 @@ scipy>=1.13
 matplotlib>=3.8
 openpyxl>=3.1
 scikit-learn>=1.4
+pillow>=10.0
 
-# only for figures/make_supp_sequence.py
+# only to recompute the sequence embeddings from scratch
 # umap-learn>=0.5
 # fair-esm>=2.0
 # torch>=2.0

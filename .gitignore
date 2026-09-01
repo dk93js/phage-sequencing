@@ -1,5 +1,13 @@
 __pycache__/
 *.pyc
-out/
 .DS_Store
 ._*
+
+# generated output
+out/
+*.png
+figures/panels/new color/optionB/panels/
+figures/panels/new color/optionB/data/
+analysis/version 3/panels/
+analysis/version 3/data/
+analysis/fig3_mapping/*.csv

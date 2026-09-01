@@ -63,7 +63,7 @@ DATA = ROOT / "data"
 PANELS.mkdir(exist_ok=True)
 DATA.mkdir(exist_ok=True)
 
-SRC = DATA / "report_q40_ppm100_list.csv"
+SRC = Path(__file__).resolve().parents[5] / "data" / "report_q40_ppm100_list.csv"
 assert SRC.exists(), f"source CSV not found: {SRC}"
 
 ROUNDS = [0, 1, 2, 3, 4]
@@ -72,7 +72,8 @@ P_COLS = [f"P{r}" for r in ROUNDS]
 LIBS = ["ss", "ds"]
 LIB_LABEL = {"ss": "ssDNA", "ds": "dsDNA"}
 
-C_CLUSTER = {1: "#E63946", 2: "#457B9D", 3: "#2A9D8F"}
+# RECOLOUR (optionB): C2 -> dark navy, C3 -> light teal. Needs two knock-on fixes: the Fig 1C stack shade range is narrowed (a light C3 washes out into the grey 'other' band) and the Supp 1B strip label flips to black where white would drop below 3:1 contrast.
+C_CLUSTER = {1: "#E63946", 2: "#17375E", 3: "#56C1B0"}
 CLUSTER_LABEL = {1: "C1 enriching", 2: "C2 intermediate", 3: "C3 depleted"}
 CLUSTER_SHORT_NAME = {1: "C1_enriching", 2: "C2_intermediate", 3: "C3_depleted"}
 DATASETS = ["pooled", "ssDNA", "dsDNA"]
@@ -108,6 +109,19 @@ def zscore_rows(mat: np.ndarray) -> np.ndarray:
     sd = mat.std(axis=1, keepdims=True)
     sd[sd == 0] = 1
     return (mat - mu) / sd
+
+
+def _label_color(bg, min_contrast=3.0):
+    """White text on a cluster block unless the block is too light for it.
+
+    Added for the recolour: a light C3 cannot carry the white bold "C3" label
+    (WCAG contrast 2.2:1), so the label flips to black below `min_contrast`.
+    With the published mid-teal C3 the rule returns white, i.e. no visual change.
+    """
+    r, g, b = to_rgb(bg)
+    lin = [c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4 for c in (r, g, b)]
+    L = 0.2126 * lin[0] + 0.7152 * lin[1] + 0.0722 * lin[2]
+    return "white" if (1.05 / (L + 0.05)) >= min_contrast else "black"
 
 
 def _lighten(color, f):
@@ -280,7 +294,8 @@ def render_enrichment_heatmap(ds_name: str, info: dict):
         idx = np.where(cl_ord == c)[0]
         if len(idx):
             ax_anno.text(0.5, idx.mean() + 0.5, f"C{c}", ha="center", va="center",
-                         color="white", fontweight="bold", fontsize=11, rotation=90)
+                         color=_label_color(C_CLUSTER[c]), fontweight="bold",
+                         fontsize=11, rotation=90)
 
     vmax = 2.5
     im = ax_hm.imshow(z_ord, aspect="auto", cmap=CMAP_DIV, vmin=-vmax, vmax=vmax,

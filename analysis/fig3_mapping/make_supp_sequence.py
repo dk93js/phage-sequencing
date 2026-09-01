@@ -12,8 +12,8 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from scipy.stats import mannwhitneyu
 
-ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "out/figures"
+ROOT = Path(__file__).resolve().parents[2]
+OUT = ROOT / "analysis/fig3_mapping"
 mpl.rcParams.update({
     "font.family": "Arial", "font.size": 13, "axes.titlesize": 13.5,
     "axes.labelsize": 13.5, "xtick.labelsize": 12, "ytick.labelsize": 12,

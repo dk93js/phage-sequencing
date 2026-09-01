@@ -1,5 +1,7 @@
 """R2 point 3 - the 215 cluster-discordant clonotypes: analyse them instead of
 just excluding them from the per-cluster panels."""
+import os
+os.makedirs("out/figures", exist_ok=True)
 import numpy as np, pandas as pd
 from scipy import stats
 

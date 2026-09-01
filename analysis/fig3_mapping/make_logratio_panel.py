@@ -12,8 +12,8 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from scipy.stats import mannwhitneyu
 
-ROOT = Path(__file__).resolve().parent.parent
-PANELS = ROOT / "out/figures"
+ROOT = Path(__file__).resolve().parents[2]
+PANELS = ROOT / "analysis/version 3/panels"
 mpl.rcParams.update({
     "font.family": "Arial", "font.size": 13, "axes.titlesize": 14,
     "axes.labelsize": 14, "xtick.labelsize": 12, "ytick.labelsize": 12,

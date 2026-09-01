@@ -5,6 +5,8 @@
 (c) bootstrap cluster stability (Hennig's clusterboot Jaccard)
 (d) does the paper's conclusion survive a different k?
 """
+import os
+os.makedirs("out/figures", exist_ok=True)
 import numpy as np, pandas as pd
 from scipy.cluster.hierarchy import linkage, fcluster
 from scipy.spatial.distance import pdist

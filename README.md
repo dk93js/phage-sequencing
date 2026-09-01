@@ -12,25 +12,33 @@ M13 particles (**ssDNA**) — across the input library and four rounds of select
 
 Raw sequencing reads: NCBI SRA **PRJNA1507317**.
 
-## Layout
-
-```
-data/       inputs (see "Data" below)
-figures/    scripts that produce the published main and supplementary figure panels
-revision/   analyses added in response to peer review
-out/        everything the scripts write (created on first run)
-```
-
-## Requirements
-
-Python >= 3.11 with `numpy pandas scipy matplotlib openpyxl scikit-learn`
-(`umap-learn fair-esm torch` are needed only for `figures/make_supp_sequence.py`).
+## Regenerating the figures
 
 ```bash
 pip install -r requirements.txt
+bash run_all_figures.sh          # or: PYTHON=python3 bash run_all_figures.sh
 ```
 
-Run every script from the repository root, e.g. `python revision/r2_02_k_selection.py`.
+Run everything from the repository root. The script regenerates every panel in
+dependency order; 42 of the 44 images in the submitted figure deck come out
+byte-identical (the remaining two are arrow icons drawn in PowerPoint).
+`PANELS.md` lists which script produces which panel.
+
+## Layout
+
+```
+data/                                  inputs (below)
+figures/panels/new color/optionB/code/ base panels in the final cluster palette
+figures/panels/capitalized/code/       the same panels with capitalised titles, as submitted
+analysis/version 3/code/               Figure 1A, the Figure 1C inset, clustering checks
+analysis/fig3_mapping/                 Figure 3, Supplementary Figures 4 and 5
+analysis/revision_2026-08/             analyses and panels added in response to peer review
+out/                                   written by the revision scripts
+```
+
+The directory names are the ones the scripts were written against and are kept so that
+they run unmodified; the only edits made for release were replacing absolute paths and
+pointing the phage-ELISA reader at `data/phage_elisa_wells.xlsx`.
 
 ## Data
 
@@ -39,36 +47,20 @@ Run every script from the repository root, e.g. `python revision/r2_02_k_selecti
 | `report_q40_ppm100_list.csv` | the analysis set: 2,145 clonotype-by-library rows (1,052 ssDNA + 1,093 dsDNA unique HCDR3 amino-acid sequences), read counts and depth-normalised abundance (PPM) for R0-R4, after Phred Q >= 40 and PPM >= 100 filtering |
 | `clusters_pooled.csv`, `clusters_ssDNA.csv`, `clusters_dsDNA.csv` | Ward (k = 3) trajectory clusters and the z-scored trajectories they were built from |
 | `per_cluster_stats.csv`, `cluster_size_summary.csv` | per-round Spearman rho and log-log slope by cluster; cluster sizes |
-| `read_depth_per_round.csv` | reads per library and round before and after filtering |
+| `read_depth_per_round.csv` | reads per library and round: those belonging to the analysis set, the same value as PPM of all quality-filtered reads, and the quality-filtered total |
 | `phage_elisa_wells.xlsx` | phage-ELISA well-level calls for the retrieved clones (692 wells -> 568 unique HCDR3) |
 | `elisa_calls_per_hcdr3.csv` | the same data collapsed to one call per HCDR3 (90 antigen-reactive / 478 non-reactive) |
 
-## What the scripts do
+## Requirements
 
-**figures/**
+Python >= 3.11 with `numpy pandas scipy matplotlib openpyxl scikit-learn pillow`.
+`figures/panels/capitalized/code/` and the base panel scripts use Arial; on systems
+without it Matplotlib substitutes a default sans-serif and the panels will differ
+cosmetically from the published ones.
 
-- `make_panels.py`, `make_panels_sized.py`, `make_figures_sized.py`, `panelA_prototypes.py`,
-  `panel_C_prototypes.py`, `make_fig1C_inset.py` — Figure 1 and 2 panels: diversity, Top-1%
-  concentration, Ward clustering, per-round composition, ss-vs-ds scatters, HCDR3 length.
-- `check_cluster_discordance.py` — the 3 x 3 ssDNA/dsDNA cluster-label confusion matrix.
-- `make_fig3_sized.py`, `make_logratio_panel.py` — Figure 3: antigen-reactive clonotypes on the
-  ss-vs-ds scatter and the log10(ssDNA/dsDNA) comparison.
-- `make_supp5_logratio.py` — the same log-ratio comparison at every round (R0-R4).
-- `make_supp_sequence.py` — HCDR3 sequence features, Atchley-factor and ESM-2 embeddings,
-  logistic-regression probe and UMAP projections.
-- `map_yoo2020_validated_clones.py` — maps the validated binders of Yoo et al. 2020 onto the map.
-
-**revision/**
-
-- `r2_02_k_selection.py` — silhouette / Calinski-Harabasz / Davies-Bouldin / gap statistic for
-  k = 2-8, bootstrap cluster stability (Jaccard, 200 resamples) and the key slope as a function of k.
-- `r2_03_discordant.py` — the 215 cluster-discordant clonotypes: transition classes, their
-  log-ratios, and the antigen-reactivity of clonotypes the two templates disagree about.
-- `r2_04_06_regression_and_thresholds.py` — standardised major axis and Deming regression
-  alongside OLS; sensitivity of the whole pipeline to the PPM cut-off (100 / 200 / 500 / 1000).
-- `r2_08_elisa_threshold.py` — sensitivity of the antigen-reactivity result to the ELISA
-  calling rule.
-- `render_revision_panels.py` — panels for the supplementary figures added at revision.
+`analysis/fig3_mapping/make_supp_sequence.py` reads pre-computed UMAP coordinates from
+the two `.npz` files in that directory, so it does not need `umap-learn`, `fair-esm` or
+PyTorch. Those packages are needed only to recompute the embeddings from scratch.
 
 ## Key values reproduced by this code
 

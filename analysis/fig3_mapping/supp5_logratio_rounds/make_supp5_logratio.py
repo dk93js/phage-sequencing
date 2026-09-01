@@ -8,8 +8,8 @@ House style: Arial, 13 / title 14 / label 14 / tick 12 / legend 10, 3.6-in panel
 Numbered as Supplementary Figure 5 (appended; no renumbering of Supp 1-4).
 
 Outputs (this folder):
-  suppfig5_logratio_R0..R4.png   - five per-round histograms (Supp 2 layout convention)
-  suppfig5_logratio_summary.png  - single panel: median (IQR) by round, both groups
+  suppfig4_logratio_R0..R4.png   - five per-round histograms (Supp 2 layout convention)
+  suppfig4_logratio_summary.png  - single panel: median (IQR) by round, both groups
   preview_*.png
 Run with /opt/anaconda3/bin/python.
 """
@@ -22,8 +22,8 @@ import matplotlib.pyplot as plt
 from matplotlib.image import imread
 from scipy.stats import mannwhitneyu
 
-ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "out/figures"
+ROOT = Path(__file__).resolve().parents[3]
+OUT = ROOT / "analysis/fig3_mapping/supp5_logratio_rounds"
 mpl.rcParams.update({
     "font.family": "Arial", "font.size": 13, "axes.titlesize": 14,
     "axes.labelsize": 14, "xtick.labelsize": 12, "ytick.labelsize": 12,
@@ -91,7 +91,7 @@ def hist_panel(R, ylabel=True, ymax=None):
             transform=ax.transAxes, ha="right", va="top", fontsize=9)
     ax.legend(frameon=False, loc="upper left", fontsize=9)
     fig.tight_layout()
-    fn = OUT / f"suppfig5_logratio_R{R}.png"
+    fn = OUT / f"suppfig4_logratio_R{R}.png"
     fig.savefig(fn); plt.close(fig)
     return fn
 
@@ -101,7 +101,7 @@ files = [hist_panel(R, ylabel=(R == 0), ymax=SHARED) for R in range(5)]
 print(f"shared y-limit = {SHARED:.2f}")
 
 # ---------- summary panel: median (IQR) by round ----------
-fig, ax = plt.subplots(figsize=(4.4, 3.6))
+fig, ax = plt.subplots(figsize=(3.6, 3.6))
 x = np.arange(5)
 for lab, idx, col, off in (("ELISA +", 0, C_POS, -0.07), ("ELISA −", 1, C_NEG, +0.07)):
     med = np.array([np.median(S[R][idx]) for R in range(5)])
@@ -121,16 +121,16 @@ for R in range(5):
 ax.text(-0.62, 1.22, "P", ha="center", fontsize=8, color="#444")
 ax.legend(frameon=False, loc="lower right", fontsize=9)
 fig.tight_layout()
-fn_sum = OUT / "suppfig5_logratio_summary.png"
+fn_sum = OUT / "suppfig4_logratio_summary.png"
 fig.savefig(fn_sum); plt.close(fig)
 
 # ---------- previews ----------
 fig, axes = plt.subplots(1, 5, figsize=(21, 4.4))
 for ax, fn in zip(axes, files):
     ax.imshow(imread(fn)); ax.axis("off")
-fig.tight_layout(); fig.savefig(OUT / "preview_supp5_histograms.png", dpi=110); plt.close(fig)
+fig.tight_layout(); fig.savefig(OUT / "preview_supp4_histograms.png", dpi=110); plt.close(fig)
 
 fig, ax = plt.subplots(figsize=(5.2, 4.4))
 ax.imshow(imread(fn_sum)); ax.axis("off")
-fig.tight_layout(); fig.savefig(OUT / "preview_supp5_summary.png", dpi=160); plt.close(fig)
+fig.tight_layout(); fig.savefig(OUT / "preview_supp4_summary.png", dpi=160); plt.close(fig)
 print("\nwrote:", *[f.name for f in files], fn_sum.name, sep="\n  ")

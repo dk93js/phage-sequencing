@@ -1,13 +1,15 @@
 """Panels for the two new supplementary figures of the Biomolecules revision.
 
-Supp Fig 6 (R2 point 2)  - choice of k and cluster stability
-Supp Fig 7 (R2 point 3)  - the 215 cluster-discordant clonotypes
+Supp Fig 1C-E (R2 point 2)  - choice of k and cluster stability
+Supp Fig 3E-F (R2 point 3)  - the 215 cluster-discordant clonotypes
 
 Style follows the published panels: Arial 13 / title 14 / label 14 / tick 12 /
 legend 10, 3.6-in panel height, 300 dpi, no top-right spines, cluster palette
 C1 #E63946, C2 #17375E, C3 #56C1B0.
 """
 from pathlib import Path
+import os
+os.makedirs("out/figures", exist_ok=True)
 import numpy as np, pandas as pd
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -47,7 +49,7 @@ ax.axvline(3, color=GREY, ls=":", lw=1.5)
 ax.set_xticks(idx.k)
 ax.text(3.1, 0.03, "k = 3\n(used)", fontsize=10, color="#555555")
 ax.set_title("Internal validity indices vs. k")
-save(fig, "suppfig6A_k_indices")
+save(fig, "suppfig1C_k_indices")
 
 fig, ax = plt.subplots(figsize=(H * 1.05, H))
 w = 0.38
@@ -59,7 +61,7 @@ ax.set_xlabel("number of clusters (k)"); ax.set_ylabel("bootstrap Jaccard")
 ax.set_ylim(0, 1.28); ax.set_yticks([0, 0.25, 0.5, 0.75, 1.0]); ax.set_xticks(stab.k)
 ax.legend(frameon=False, loc="upper right", ncol=1)
 ax.set_title("Cluster stability (200 bootstrap resamples)")
-save(fig, "suppfig6B_bootstrap_jaccard")
+save(fig, "suppfig1D_bootstrap_jaccard")
 
 fig, ax = plt.subplots(figsize=(H * 1.05, H))
 for rnd, col, mk in [("R2", C3, "^"), ("R3", C1, "o"), ("R4", C2, "s")]:
@@ -72,7 +74,7 @@ ax.set_xlabel("number of clusters (k)"); ax.set_ylabel("log–log slope (dsDNA o
 ax.set_ylim(0.3, 1.15); ax.set_xticks(sorted(conc.k.unique()))
 ax.legend(frameon=False, title=None, loc="center left", bbox_to_anchor=(0.02, 0.52))
 ax.set_title("Enriching-cluster slope across k")
-save(fig, "suppfig6C_slope_vs_k")
+save(fig, "suppfig1E_slope_vs_k")
 
 # ---------------- Supp Fig 7 -------------------------------------------------
 d = pd.read_csv(R / "r2_03_shared_clonotype_table.csv", index_col=0)
@@ -96,7 +98,7 @@ ax.set_xticklabels(labs, fontsize=10)
 ax.set_xlabel("dsDNA-copy cluster → ssDNA-copy cluster")
 ax.set_ylabel("log$_{10}$(ssDNA / dsDNA) at R3")
 ax.set_title("Discordant clonotypes by transition class")
-save(fig, "suppfig7A_transition_logratio")
+save(fig, "suppfig3E_transition_logratio")
 
 a = d[d.elisa.notna()]
 ds1 = a[a.ds_lab == 1]
@@ -116,4 +118,4 @@ ax.text(0.5, 92.5, f"P = {mant:.1f} × 10$^{{{exp}}}$", ha="center", fontsize=12
 ax.set_xticks([0, 1]); ax.set_xticklabels([g[0] for g in grp], fontsize=11)
 ax.set_ylabel("antigen-reactive (%)"); ax.set_ylim(0, 105)
 ax.set_title("dsDNA-called enriching clonotypes")
-save(fig, "suppfig7B_elisa_concordance")
+save(fig, "suppfig3F_elisa_concordance")

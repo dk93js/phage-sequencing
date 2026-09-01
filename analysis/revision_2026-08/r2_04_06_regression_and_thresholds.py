@@ -1,5 +1,7 @@
 """R2 point 4 - symmetric (errors-in-both-variables) regression instead of OLS.
 R2 point 6 - sensitivity of the conclusions to the PPM abundance cut-off."""
+import os
+os.makedirs("out/figures", exist_ok=True)
 import numpy as np, pandas as pd
 from scipy import stats
 from scipy.cluster.hierarchy import linkage, fcluster

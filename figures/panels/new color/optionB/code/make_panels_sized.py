@@ -99,7 +99,9 @@ def render_C_sized(df, top_n: int = 20):
     for c in (1, 2, 3):
         members = [i for i in top_sorted if clu[i] == c]
         for rank, i in enumerate(members):
-            f = 0.15 + 0.45 * (rank / max(1, len(members) - 1)) if len(members) > 1 else 0.2
+            # RECOLOUR (option B): narrower lighten span — a light C3 base would
+            # otherwise fade into the grey "other" band at the pale end.
+            f = 0.10 + 0.30 * (rank / max(1, len(members) - 1)) if len(members) > 1 else 0.15
             shade[i] = mp._lighten(C_CLUSTER[c], f)
 
     fig, ax = plt.subplots(figsize=C_FIGSIZE)
