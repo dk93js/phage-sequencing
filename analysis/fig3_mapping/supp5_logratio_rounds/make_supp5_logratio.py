@@ -97,7 +97,7 @@ def hist_panel(R, ylabel=True, ymax=None):
 
 SHARED = peak * 1.38   # peak density is ~4.5 in every round (early rounds are one
                        # narrow spike), so a shared y-axis is affordable and honest
-files = [hist_panel(R, ylabel=(R == 0), ymax=SHARED) for R in range(5)]
+files = [hist_panel(R, ylabel=True, ymax=SHARED) for R in range(5)]
 print(f"shared y-limit = {SHARED:.2f}")
 
 # ---------- summary panel: median (IQR) by round ----------
